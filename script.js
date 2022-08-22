@@ -8,8 +8,22 @@ const btnEqual = document.getElementById('key-equal')
 
 //atualiza o display com o valor capturado do click
 const updateDisplay = (text) => {
+     //impede que um operador seja usado seguidamente
+     let lastDisplayContent = display.textContent.charAt(display.textContent.length - 1)
+     let controlerLastDisplayContent = ["-","+","/","*"].includes(lastDisplayContent)
+     let controlerLastTextContent = ["-","+","/","*"].includes(text)   
+     
+     if(controlerLastDisplayContent && controlerLastTextContent){
+          if(text === lastDisplayContent) return
+     display.textContent = display.innerHTML.substring(0,display.innerHTML.length -1)
+     } 
+     
+     //impede que a quantidade de digitos seja maior que o tamanho do display
+     if(display.textContent.length > 20) return  
+     
      display.textContent += text;
 }
+
 //captura o valor do click
 const getClick = (event) => updateDisplay(event.target.textContent);
 
@@ -28,7 +42,12 @@ btnClearOne.addEventListener('click', () => {
 
 function cacl() {
      if(display.innerHTML) {
-          display.innerHTML = eval(display.innerHTML)
+          let valueResult = eval(display.innerHTML)
+          console.log("value",valueResult);
+               if(isNaN(valueResult)){
+                    return display.innerHTML = "Erro"    
+               }
+          display.innerHTML = valueResult
      }
 }
 
